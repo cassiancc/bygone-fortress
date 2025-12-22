@@ -7,8 +7,10 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Registry;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.RegistryOps;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.world.level.ChunkPos;
@@ -25,7 +27,7 @@ public class DataBlockProcessor extends StructureProcessor {
     private static final ResourceLocation EMPTY_RL = new ResourceLocation("minecraft", "empty");
 
     public static final Codec<DataBlockProcessor> CODEC  = RecordCodecBuilder.create((instance) -> instance.group(
-                    RegistryOps.retrieveRegistry(Registry.PROCESSOR_LIST_REGISTRY).forGetter((processor) -> processor.processorListRegistry),
+                    RegistryOps.retrieveRegistryLookup(Registries.PROCESSOR_LIST).forGetter((processor) -> processor.processorListRegistry),
                     Codec.mapPair(BlockState.CODEC.fieldOf("trigger"), BlockState.CODEC.fieldOf("replacement"))
                             .codec().listOf()
                             .xmap((list) -> list.stream().collect(Collectors.toMap(Pair::getFirst, Pair::getSecond)),
@@ -38,14 +40,14 @@ public class DataBlockProcessor extends StructureProcessor {
                     Codec.BOOL.optionalFieldOf("forced_placement", false).forGetter(config -> config.forcePlacement))
             .apply(instance, instance.stable(DataBlockProcessor::new)));
 
-    public final Registry<StructureProcessorList> processorListRegistry;
+    public final HolderLookup.RegistryLookup<StructureProcessorList> processorListRegistry;
     public final Map<BlockState, BlockState> triggerAndReplacementBlocks;
     public final ResourceLocation processorList;
     public final Direction direction;
     public final int length;
     public final boolean forcePlacement;
 
-    private DataBlockProcessor(Registry<StructureProcessorList> processorListRegistry,
+    private DataBlockProcessor(HolderLookup.RegistryLookup<StructureProcessorList> processorListRegistry,
                             Map<BlockState, BlockState> triggerAndReplacementBlocks,
                             ResourceLocation processorList,
                             Direction direction,
@@ -62,15 +64,15 @@ public class DataBlockProcessor extends StructureProcessor {
     @Override
     public StructureTemplate.StructureBlockInfo processBlock(LevelReader levelReader, BlockPos templateOffset, BlockPos worldOffset, StructureTemplate.StructureBlockInfo structureBlockInfoLocal, StructureTemplate.StructureBlockInfo structureBlockInfoWorld, StructurePlaceSettings structurePlacementData) {
 
-        BlockState blockState = structureBlockInfoWorld.state;
+        BlockState blockState = structureBlockInfoWorld.state();
         if (triggerAndReplacementBlocks.containsKey(blockState)) {
-            BlockPos worldPos = structureBlockInfoWorld.pos;
+            BlockPos worldPos = structureBlockInfoWorld.pos();
 
             BlockState replacementState = triggerAndReplacementBlocks.get(blockState);
             BlockPos.MutableBlockPos currentPos = new BlockPos.MutableBlockPos().set(worldPos);
             StructureProcessorList structureProcessorList = null;
             if(processorList != null && !processorList.equals(EMPTY_RL)) {
-                structureProcessorList = processorListRegistry.get(processorList);
+                structureProcessorList = processorListRegistry.getOrThrow(ResourceKey.create(Registries.PROCESSOR_LIST, processorList)).get();
             }
 
             if(levelReader instanceof WorldGenRegion worldGenRegion && !worldGenRegion.getCenter().equals(new ChunkPos(currentPos))) {
@@ -102,12 +104,12 @@ public class DataBlockProcessor extends StructureProcessor {
                         if(newPillarState2 == null) {
                             break;
                         }
-                        newPillarState2 = processor.processBlock(levelReader, newPillarState1.pos, newPillarState2.pos, newPillarState1, newPillarState2, structurePlacementData);
+                        newPillarState2 = processor.processBlock(levelReader, newPillarState1.pos(), newPillarState2.pos(), newPillarState1, newPillarState2, structurePlacementData);
                     }
                 }
 
                 if(newPillarState2 != null) {
-                    levelReader.getChunk(currentPos).setBlockState(currentPos, newPillarState2.state, false);
+                    levelReader.getChunk(currentPos).setBlockState(currentPos, newPillarState2.state(), false);
                 }
 
                 currentPos.move(direction);

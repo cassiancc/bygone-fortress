@@ -27,8 +27,9 @@ public abstract class ModStructureUtils {
 	public static boolean isNearStructure(Structure.GenerationContext context, int radius, Holder<StructureSet> ...features) {
 		ChunkPos chunkPos = context.chunkPos();
 		boolean isNearStructure = false;
-		for (Holder<StructureSet> feature : features)
-			isNearStructure = isNearStructure || context.chunkGenerator().hasStructureChunkInRange(feature, context.randomState(), context.seed(), chunkPos.x, chunkPos.z, radius);
+		// fixme
+//		for (Holder<StructureSet> feature : features)
+//			isNearStructure = isNearStructure || context.chunkGenerator().hasStructureChunkInRange(feature, context.randomState(), context.seed(), chunkPos.x, chunkPos.z, radius);
 		return isNearStructure;
 	}
 
@@ -90,7 +91,7 @@ public abstract class ModStructureUtils {
 	}
 
 	private static boolean isReplaceableByStructures(BlockState blockState) {
-		return blockState.isAir() || blockState.getMaterial().isLiquid() || blockState.getMaterial().isReplaceable();
+		return blockState.isAir() || blockState.liquid() || blockState.canBeReplaced();
 	}
 
 	public static int getScaledNetherHeight(int vanillaHeight){

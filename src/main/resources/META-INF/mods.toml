@@ -1,26 +1,26 @@
 
 modLoader="javafml"
-loaderVersion="${loader_version_range}"
+loaderVersion="[42,)"
 license="MIT"
 
 [[mods]]
-modId="${mod_id}"
-version="${mod_version}"
-displayName="${mod_name}"
-logoFile="${banner_image}"
-authors="${mod_authors}"
-description='''${mod_description}'''
+modId="bygonefortress"
+version="1.0.0"
+displayName="Bygone Fortress"
+logoFile="bygonefortress.png"
+authors="izofar, cassiancc"
+description='''Continuing the discontinued fortress from Bygone Nether'''
 
-[[dependencies.${mod_id}]]
+[[dependencies.bygonefortress]]
     modId="forge"
     mandatory=true
-    versionRange="${forge_version_range}"
+    versionRange="[42.0.0,)"
     ordering="NONE"
     side="BOTH"
 
-[[dependencies.${mod_id}]]
+[[dependencies.bygonefortress]]
     modId="minecraft"
     mandatory=true
-    versionRange="${minecraft_version_range}"
+    versionRange="[1.20,1.21)"
     ordering="NONE"
     side="BOTH"
