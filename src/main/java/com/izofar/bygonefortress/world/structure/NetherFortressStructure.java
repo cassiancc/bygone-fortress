@@ -8,7 +8,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.QuartPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.NoiseColumn;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.LegacyRandomSource;
@@ -20,6 +20,7 @@ import net.minecraft.world.level.levelgen.structure.pools.DimensionPadding;
 import net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.minecraft.world.level.levelgen.structure.pools.alias.PoolAliasLookup;
+import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
 import net.minecraft.world.level.levelgen.structure.templatesystem.LiquidSettings;
 
 import java.util.Optional;
@@ -29,7 +30,7 @@ public class NetherFortressStructure extends Structure {
 	public static final MapCodec<NetherFortressStructure> CODEC = RecordCodecBuilder.<NetherFortressStructure>mapCodec(instance ->
 			instance.group(NetherFortressStructure.settingsCodec(instance),
 					StructureTemplatePool.CODEC.fieldOf("start_pool").forGetter(structure -> structure.startPool),
-					ResourceLocation.CODEC.optionalFieldOf("start_jigsaw_name").forGetter(structure -> structure.startJigsawName),
+					Identifier.CODEC.optionalFieldOf("start_jigsaw_name").forGetter(structure -> structure.startJigsawName),
 					Codec.intRange(0, 30).fieldOf("size").forGetter(structure -> structure.size),
 					HeightProvider.CODEC.fieldOf("start_height").forGetter(structure -> structure.startHeight),
 					Heightmap.Types.CODEC.optionalFieldOf("project_start_to_heightmap").forGetter(structure -> structure.projectStartToHeightmap),
@@ -37,7 +38,7 @@ public class NetherFortressStructure extends Structure {
 			).apply(instance, NetherFortressStructure::new));
 
 	private final Holder<StructureTemplatePool> startPool;
-	private final Optional<ResourceLocation> startJigsawName;
+	private final Optional<Identifier> startJigsawName;
 	private final int size;
 	private final HeightProvider startHeight;
 	private final Optional<Heightmap.Types> projectStartToHeightmap;
@@ -45,7 +46,7 @@ public class NetherFortressStructure extends Structure {
 
 	public NetherFortressStructure(Structure.StructureSettings config,
 							Holder<StructureTemplatePool> startPool,
-							Optional<ResourceLocation> startJigsawName,
+							Optional<Identifier> startJigsawName,
 							int size,
 							HeightProvider startHeight,
 							Optional<Heightmap.Types> projectStartToHeightmap,
@@ -76,7 +77,7 @@ public class NetherFortressStructure extends Structure {
 		if(!checkLocation(context)) return Optional.empty();
 
 		BlockPos blockpos = ModStructureUtils.getElevation(context, 45, ModStructureUtils.getScaledNetherHeight(54));
-		return JigsawPlacement.addPieces(context, this.startPool, this.startJigsawName, this.size, blockpos, false, this.projectStartToHeightmap, this.maxDistanceFromCenter, PoolAliasLookup.EMPTY, new DimensionPadding(0), LiquidSettings.IGNORE_WATERLOGGING);
+		return JigsawPlacement.addPieces(context, this.startPool, this.startJigsawName, this.size, blockpos, false, this.projectStartToHeightmap, new JigsawStructure.MaxDistance(this.maxDistanceFromCenter), PoolAliasLookup.EMPTY, new DimensionPadding(0), LiquidSettings.IGNORE_WATERLOGGING);
 
 	}
 

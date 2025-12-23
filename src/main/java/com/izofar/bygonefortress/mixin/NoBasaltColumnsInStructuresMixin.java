@@ -36,9 +36,9 @@ public class NoBasaltColumnsInStructuresMixin {
             BygoneFortressMod.LOGGER.warn("Bygone Nether: Detected a mod with a broken basalt columns configuredfeature that is trying to place blocks outside the 3x3 safe chunk area for features. Find the broken mod and report to them to fix the placement of their basalt columns feature.");
             return;
         }
-        Registry<Structure> configuredStructureFeatureRegistry = levelAccessor.registryAccess().registryOrThrow(Registries.STRUCTURE);
+        Registry<Structure> configuredStructureFeatureRegistry = levelAccessor.registryAccess().lookupOrThrow(Registries.STRUCTURE);
         StructureManager structureFeatureManager = ((WorldGenRegionAccessor)levelAccessor).getServerLevel().structureManager();
-        for (Holder<Structure> configuredStructureFeature : configuredStructureFeatureRegistry.getOrCreateTag(ModTags.NO_BASALT)) {
+        for (Holder<Structure> configuredStructureFeature : configuredStructureFeatureRegistry.getTagOrEmpty(ModTags.NO_BASALT)) {
             if (structureFeatureManager.getStructureAt(mutableBlockPos, configuredStructureFeature.value()).isValid()) {
                 cir.setReturnValue(false);
                 return;

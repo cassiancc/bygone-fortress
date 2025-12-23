@@ -14,7 +14,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.level.ChunkPos;
@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 
 public class DataBlockProcessor extends StructureProcessor {
 
-    private static final ResourceLocation EMPTY_RL = ResourceLocation.withDefaultNamespace("empty");
+    private static final Identifier EMPTY_RL = Identifier.withDefaultNamespace("empty");
 
     public static final MapCodec<DataBlockProcessor> CODEC  = RecordCodecBuilder.mapCodec((instance) -> instance.group(
                     ModStructureUtils.retrieveRegistryLookup(Registries.PROCESSOR_LIST).forGetter((processor) -> processor.processorListRegistry),
@@ -38,7 +38,7 @@ public class DataBlockProcessor extends StructureProcessor {
                                     (map) -> map.entrySet().stream().map((entry) -> Pair.of(entry.getKey(), entry.getValue())).collect(Collectors.toList()))
                             .fieldOf("trigger_and_replacements")
                             .forGetter((processor) -> processor.triggerAndReplacementBlocks),
-                    ResourceLocation.CODEC.optionalFieldOf("processor_list", EMPTY_RL).forGetter(processor -> processor.processorList),
+                    Identifier.CODEC.optionalFieldOf("processor_list", EMPTY_RL).forGetter(processor -> processor.processorList),
                     Direction.CODEC.optionalFieldOf("direction", Direction.DOWN).forGetter(processor -> processor.direction),
                     Codec.INT.optionalFieldOf("length", 1000).forGetter(config -> config.length),
                     Codec.BOOL.optionalFieldOf("forced_placement", false).forGetter(config -> config.forcePlacement))
@@ -46,14 +46,14 @@ public class DataBlockProcessor extends StructureProcessor {
 
     public final HolderLookup.RegistryLookup<StructureProcessorList> processorListRegistry;
     public final Map<BlockState, BlockState> triggerAndReplacementBlocks;
-    public final ResourceLocation processorList;
+    public final Identifier processorList;
     public final Direction direction;
     public final int length;
     public final boolean forcePlacement;
 
     private DataBlockProcessor(HolderLookup.RegistryLookup<StructureProcessorList> processorListRegistry,
                             Map<BlockState, BlockState> triggerAndReplacementBlocks,
-                            ResourceLocation processorList,
+                            Identifier processorList,
                             Direction direction,
                             int length,
                             boolean forcePlacement) {
@@ -86,7 +86,7 @@ public class DataBlockProcessor extends StructureProcessor {
             int terrainY = Integer.MIN_VALUE;
             if(direction == Direction.DOWN && !forcePlacement) {
                 terrainY = ModStructureUtils.getFirstLandYFromPos(levelReader, worldPos);
-                if(terrainY <= levelReader.getMinBuildHeight() && length + 2 >= worldPos.getY() - levelReader.getMinBuildHeight()) {
+                if(terrainY <= levelReader.getMinY() && length + 2 >= worldPos.getY() - levelReader.getMinY()) {
                     // Replaces the data block itself
                     return (replacementState == null || replacementState.is(Blocks.STRUCTURE_VOID)) ?
                             null : new StructureTemplate.StructureBlockInfo(worldPos, replacementState, null);
@@ -113,7 +113,7 @@ public class DataBlockProcessor extends StructureProcessor {
                 }
 
                 if(newPillarState2 != null) {
-                    levelReader.getChunk(currentPos).setBlockState(currentPos, newPillarState2.state(), false);
+                    levelReader.getChunk(currentPos).setBlockState(currentPos, newPillarState2.state());
                 }
 
                 currentPos.move(direction);

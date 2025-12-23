@@ -86,7 +86,7 @@ public abstract class ModStructureUtils {
 		ChunkAccess currentChunk = worldView.getChunk(mutable);
 		BlockState currentState = currentChunk.getBlockState(mutable);
 
-		while(mutable.getY() >= worldView.getMinBuildHeight() && isReplaceableByStructures(currentState)) {
+		while(mutable.getY() >= worldView.getMinY() && isReplaceableByStructures(currentState)) {
 			mutable.move(Direction.DOWN);
 			currentState = currentChunk.getBlockState(mutable);
 		}

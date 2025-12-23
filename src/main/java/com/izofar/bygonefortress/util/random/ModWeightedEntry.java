@@ -1,16 +1,22 @@
 package com.izofar.bygonefortress.util.random;
 
-import net.minecraft.util.random.Weight;
-import net.minecraft.util.random.WeightedEntry;
 
-public class ModWeightedEntry<T> implements WeightedEntry{
+import net.minecraft.client.sounds.SoundEngine;
+import net.minecraft.client.sounds.Weighted;
+import net.minecraft.util.RandomSource;
+import net.minecraft.util.random.WeightedList;
+import net.minecraft.world.entity.ai.behavior.ShufflingList;
+
+import java.util.Map;
+
+public class ModWeightedEntry<T> implements Weighted<T> {
 
 	private final T data;
-    private final Weight weight;
+    private final int weight;
 	
     public ModWeightedEntry(T data, int weight) {
         this.data = data;
-        this.weight = Weight.of(weight);
+        this.weight = weight;
      }
 
      public T getData() {
@@ -18,8 +24,18 @@ public class ModWeightedEntry<T> implements WeightedEntry{
      }
 
      @Override
-     public Weight getWeight() {
+     public int getWeight() {
         return this.weight;
      }
-     
+
+    @Override
+    public T getSound(RandomSource randomSource) {
+        return null;
+    }
+
+    @Override
+    public void preloadIfRequired(SoundEngine soundEngine) {
+
+    }
+
 }
