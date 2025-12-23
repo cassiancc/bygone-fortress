@@ -5,6 +5,7 @@ import com.izofar.bygonefortress.util.ModStructureUtils;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -27,9 +28,9 @@ import java.util.stream.Collectors;
 
 public class DataBlockProcessor extends StructureProcessor {
 
-    private static final ResourceLocation EMPTY_RL = new ResourceLocation("minecraft", "empty");
+    private static final ResourceLocation EMPTY_RL = ResourceLocation.withDefaultNamespace("empty");
 
-    public static final Codec<DataBlockProcessor> CODEC  = RecordCodecBuilder.create((instance) -> instance.group(
+    public static final MapCodec<DataBlockProcessor> CODEC  = RecordCodecBuilder.mapCodec((instance) -> instance.group(
                     ModStructureUtils.retrieveRegistryLookup(Registries.PROCESSOR_LIST).forGetter((processor) -> processor.processorListRegistry),
                     Codec.mapPair(BlockState.CODEC.fieldOf("trigger"), BlockState.CODEC.fieldOf("replacement"))
                             .codec().listOf()

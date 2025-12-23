@@ -12,7 +12,7 @@ import java.util.function.Supplier;
 public abstract class ModProcessors {
 
 
-    public static final Supplier<StructureProcessorType<DataBlockProcessor>> DATA_BLOCK_PROCESSOR = ()-> Registry.register(BuiltInRegistries.STRUCTURE_PROCESSOR,new ResourceLocation(BygoneFortressMod.MODID, "data_block_processor"), () -> DataBlockProcessor.CODEC);
+    public static final Supplier<StructureProcessorType<DataBlockProcessor>> DATA_BLOCK_PROCESSOR = ()-> Registry.register(BuiltInRegistries.STRUCTURE_PROCESSOR, ResourceLocation.fromNamespaceAndPath(BygoneFortressMod.MODID, "data_block_processor"), () -> DataBlockProcessor.CODEC);
 
     public static void register(){
         DATA_BLOCK_PROCESSOR.get();

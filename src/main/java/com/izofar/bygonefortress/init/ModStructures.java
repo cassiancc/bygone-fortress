@@ -12,7 +12,7 @@ import java.util.function.Supplier;
 
 public abstract class ModStructures {
 
-	public static final Supplier<StructureType<NetherFortressStructure>> NETHER_FORTRESS = ()-> Registry.register(BuiltInRegistries.STRUCTURE_TYPE, new ResourceLocation(BygoneFortressMod.MODID, "fortress"), ()-> NetherFortressStructure.CODEC);
+	public static final Supplier<StructureType<NetherFortressStructure>> NETHER_FORTRESS = ()-> Registry.register(BuiltInRegistries.STRUCTURE_TYPE, ResourceLocation.fromNamespaceAndPath(BygoneFortressMod.MODID, "fortress"), ()-> NetherFortressStructure.CODEC);
 	
 	public static void register() {
 		NETHER_FORTRESS.get();

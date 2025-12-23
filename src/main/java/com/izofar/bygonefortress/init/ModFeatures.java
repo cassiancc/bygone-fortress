@@ -14,7 +14,7 @@ import java.util.function.Supplier;
 public abstract class ModFeatures {
 
 
-	public static final Supplier<Feature<NoneFeatureConfiguration>> MOB_FEATURE_WITHER_SKELETON = ()-> Registry.register(BuiltInRegistries.FEATURE, new ResourceLocation(BygoneFortressMod.MODID,"mob_feature_wither_skeleton"), new MobFeature<>(() -> EntityType.WITHER_SKELETON));
+	public static final Supplier<Feature<NoneFeatureConfiguration>> MOB_FEATURE_WITHER_SKELETON = ()-> Registry.register(BuiltInRegistries.FEATURE, ResourceLocation.fromNamespaceAndPath(BygoneFortressMod.MODID,"mob_feature_wither_skeleton"), new MobFeature<>(() -> EntityType.WITHER_SKELETON));
 
 	public static void register() {
 		MOB_FEATURE_WITHER_SKELETON.get();

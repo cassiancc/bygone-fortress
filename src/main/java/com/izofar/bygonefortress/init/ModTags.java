@@ -10,6 +10,6 @@ public class ModTags {
     public static TagKey<Structure> NO_BASALT;
 
     public static void initTags(){
-       NO_BASALT = TagKey.create(Registries.STRUCTURE, new ResourceLocation(BygoneFortressMod.MODID, "no_basalt"));
+       NO_BASALT = TagKey.create(Registries.STRUCTURE, ResourceLocation.fromNamespaceAndPath(BygoneFortressMod.MODID, "no_basalt"));
     }
 }

@@ -24,7 +24,7 @@ public class NoDeltasInStructuresMixin {
 		)
     private void bygonefortress_noDeltasInStructures(FeaturePlaceContext<DeltaFeatureConfiguration> context, CallbackInfoReturnable<Boolean> cir) {
         Registry<Structure> configuredStructureFeatureRegistry = context.level().registryAccess().registryOrThrow(Registries.STRUCTURE);
-        StructureManager structureFeatureManager = ((WorldGenRegionAccessor)context.level()).getStructureFeatureManager();
+        StructureManager structureFeatureManager = ((WorldGenRegionAccessor)context.level()).getServerLevel().structureManager();
         for (Holder<Structure> configuredStructureFeature : configuredStructureFeatureRegistry.getOrCreateTag(ModTags.NO_BASALT)) {
             if (structureFeatureManager.getStructureAt(context.origin(), configuredStructureFeature.value()).isValid()) {
                 cir.setReturnValue(false);

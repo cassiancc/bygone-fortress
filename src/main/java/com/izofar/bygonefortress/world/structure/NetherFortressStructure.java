@@ -3,6 +3,7 @@ package com.izofar.bygonefortress.world.structure;
 import com.izofar.bygonefortress.init.ModStructures;
 import com.izofar.bygonefortress.util.ModStructureUtils;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -15,14 +16,17 @@ import net.minecraft.world.level.levelgen.WorldgenRandom;
 import net.minecraft.world.level.levelgen.heightproviders.HeightProvider;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureType;
+import net.minecraft.world.level.levelgen.structure.pools.DimensionPadding;
 import net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
+import net.minecraft.world.level.levelgen.structure.pools.alias.PoolAliasLookup;
+import net.minecraft.world.level.levelgen.structure.templatesystem.LiquidSettings;
 
 import java.util.Optional;
 
 public class NetherFortressStructure extends Structure {
 
-	public static final Codec<NetherFortressStructure> CODEC = RecordCodecBuilder.<NetherFortressStructure>mapCodec(instance ->
+	public static final MapCodec<NetherFortressStructure> CODEC = RecordCodecBuilder.<NetherFortressStructure>mapCodec(instance ->
 			instance.group(NetherFortressStructure.settingsCodec(instance),
 					StructureTemplatePool.CODEC.fieldOf("start_pool").forGetter(structure -> structure.startPool),
 					ResourceLocation.CODEC.optionalFieldOf("start_jigsaw_name").forGetter(structure -> structure.startJigsawName),
@@ -30,7 +34,7 @@ public class NetherFortressStructure extends Structure {
 					HeightProvider.CODEC.fieldOf("start_height").forGetter(structure -> structure.startHeight),
 					Heightmap.Types.CODEC.optionalFieldOf("project_start_to_heightmap").forGetter(structure -> structure.projectStartToHeightmap),
 					Codec.intRange(1, 128).fieldOf("max_distance_from_center").forGetter(structure -> structure.maxDistanceFromCenter)
-			).apply(instance, NetherFortressStructure::new)).codec();
+			).apply(instance, NetherFortressStructure::new));
 
 	private final Holder<StructureTemplatePool> startPool;
 	private final Optional<ResourceLocation> startJigsawName;
@@ -72,7 +76,7 @@ public class NetherFortressStructure extends Structure {
 		if(!checkLocation(context)) return Optional.empty();
 
 		BlockPos blockpos = ModStructureUtils.getElevation(context, 45, ModStructureUtils.getScaledNetherHeight(54));
-		return JigsawPlacement.addPieces(context, this.startPool, this.startJigsawName, this.size, blockpos, false, this.projectStartToHeightmap, this.maxDistanceFromCenter);
+		return JigsawPlacement.addPieces(context, this.startPool, this.startJigsawName, this.size, blockpos, false, this.projectStartToHeightmap, this.maxDistanceFromCenter, PoolAliasLookup.EMPTY, new DimensionPadding(0), LiquidSettings.IGNORE_WATERLOGGING);
 
 	}
 

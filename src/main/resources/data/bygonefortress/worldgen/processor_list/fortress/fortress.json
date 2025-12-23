@@ -33,7 +33,7 @@
     },
     {
       "processor_type": "bygonefortress:data_block_processor",
-      "direction": "DOWN",
+      "direction": "down",
       "processor_list": "bygonefortress:fortress/fortress",
       "trigger_and_replacements": [
         {
@@ -48,7 +48,7 @@
     },
     {
       "processor_type": "bygonefortress:data_block_processor",
-      "direction": "DOWN",
+      "direction": "down",
       "processor_list": "bygonefortress:fortress/fortress",
       "trigger_and_replacements": [
         {
