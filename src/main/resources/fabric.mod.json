@@ -2,8 +2,8 @@
 	"schemaVersion": 1,
 	"id": "bygonefortress",
 	"version": "${version}",
-	"name": "Bygone Fortress: Legacy",
-	"description": "Continuing the discontinued fortress from Bygone Nether. An unofficial 1.20 port by cassiancc.",
+	"name": "Bygone Fortress Plus",
+	"description": "Adds the original fortress from the Bygone Nether Mod - a port of Bygone Fortress to modern versions.",
 	"authors": [
 		"cassiancc",
 		"izofar"
@@ -13,7 +13,7 @@
 		"sources": "https://github.com/cassiancc/bygone-fortress"
 	},
 	"license": "MIT",
-	"icon": "bygonefortress.png",
+	"icon": "icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
