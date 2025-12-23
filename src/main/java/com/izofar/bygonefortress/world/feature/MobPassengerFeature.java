@@ -37,7 +37,7 @@ public class MobPassengerFeature<P extends Mob, V extends Mob> extends Feature<N
     private V createVehicle(FeaturePlaceContext<NoneFeatureConfiguration> context, Pair<Supplier<EntityType<? extends P>>, Supplier<EntityType<? extends V>>> pair) {
         BlockPos position = context.origin().below();
         V vehicle = pair.getSecond().get().create(context.level().getLevel());
-        vehicle.finalizeSpawn(context.level(), context.level().getCurrentDifficultyAt(position), MobSpawnType.SPAWNER, null, null);
+        vehicle.finalizeSpawn(context.level(), context.level().getCurrentDifficultyAt(position), MobSpawnType.SPAWNER, null);
         vehicle.setPos(position.getX(), position.getY(), position.getZ());
         vehicle.setPersistenceRequired();
         return vehicle;
@@ -46,7 +46,7 @@ public class MobPassengerFeature<P extends Mob, V extends Mob> extends Feature<N
     private P createPassenger(FeaturePlaceContext<NoneFeatureConfiguration> context, Pair<Supplier<EntityType<? extends P>>, Supplier<EntityType<? extends V>>> pair) {
         BlockPos position = context.origin().below();
         P passenger = pair.getFirst().get().create(context.level().getLevel());
-        passenger.finalizeSpawn(context.level(), context.level().getCurrentDifficultyAt(position), MobSpawnType.SPAWNER, null, null);
+        passenger.finalizeSpawn(context.level(), context.level().getCurrentDifficultyAt(position), MobSpawnType.SPAWNER, null);
         passenger.setPos(position.getX(), position.getY(), position.getZ());
         passenger.setPersistenceRequired();
         return passenger;

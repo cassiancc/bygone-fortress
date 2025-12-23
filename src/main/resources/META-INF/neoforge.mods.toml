@@ -1,6 +1,6 @@
 
 modLoader="javafml"
-loaderVersion="[42,)"
+loaderVersion="[4,)"
 license="MIT"
 
 [[mods]]
@@ -12,15 +12,18 @@ authors="izofar, cassiancc"
 description='''Adds the original fortress from the Bygone Nether Mod - a port of Bygone Fortress to modern versions.'''
 
 [[dependencies.bygonefortress]]
-    modId="forge"
-    mandatory=true
-    versionRange="[42.0.0,)"
+    modId="neoforge"
+    type="required"
+    versionRange="[21,)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.bygonefortress]]
     modId="minecraft"
-    mandatory=true
-    versionRange="[1.20,1.21)"
+    type="required"
+    versionRange="[1.21,1.21.1)"
     ordering="NONE"
     side="BOTH"
+
+file="META-INF/accesstransformer.cfg"
+config="bygonefortress.mixins.json"

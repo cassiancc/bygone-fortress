@@ -4,6 +4,7 @@ import com.izofar.bygonefortress.init.ModProcessors;
 import com.izofar.bygonefortress.util.ModStructureUtils;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -24,9 +25,9 @@ import java.util.stream.Collectors;
 
 public class DataBlockProcessor extends StructureProcessor {
 
-    private static final ResourceLocation EMPTY_RL = new ResourceLocation("minecraft", "empty");
+    private static final ResourceLocation EMPTY_RL = ResourceLocation.fromNamespaceAndPath("minecraft", "empty");
 
-    public static final Codec<DataBlockProcessor> CODEC  = RecordCodecBuilder.create((instance) -> instance.group(
+    public static final MapCodec<DataBlockProcessor> CODEC  = RecordCodecBuilder.mapCodec((instance) -> instance.group(
                     RegistryOps.retrieveRegistryLookup(Registries.PROCESSOR_LIST).forGetter((processor) -> processor.processorListRegistry),
                     Codec.mapPair(BlockState.CODEC.fieldOf("trigger"), BlockState.CODEC.fieldOf("replacement"))
                             .codec().listOf()
@@ -72,7 +73,7 @@ public class DataBlockProcessor extends StructureProcessor {
             BlockPos.MutableBlockPos currentPos = new BlockPos.MutableBlockPos().set(worldPos);
             StructureProcessorList structureProcessorList = null;
             if(processorList != null && !processorList.equals(EMPTY_RL)) {
-                structureProcessorList = processorListRegistry.getOrThrow(ResourceKey.create(Registries.PROCESSOR_LIST, processorList)).get();
+                structureProcessorList = processorListRegistry.getOrThrow(ResourceKey.create(Registries.PROCESSOR_LIST, processorList)).value();
             }
 
             if(levelReader instanceof WorldGenRegion worldGenRegion && !worldGenRegion.getCenter().equals(new ChunkPos(currentPos))) {
