@@ -1,0 +1,8 @@
+accessWidener v2 named
+
+accessible field net/minecraft/world/level/levelgen/structure/pieces/StructurePieceType NETHER_FORTRESS_BRIDGE_STRAIGHT Lnet/minecraft/world/level/levelgen/structure/pieces/StructurePieceType;
+accessible field net/minecraft/world/level/levelgen/feature/BasaltColumnsFeature CANNOT_PLACE_ON Lcom/google/common/collect/ImmutableList;
+mutable field net/minecraft/world/level/levelgen/feature/BasaltColumnsFeature CANNOT_PLACE_ON Lcom/google/common/collect/ImmutableList;
+accessible field net/minecraft/world/level/levelgen/feature/DeltaFeature CANNOT_REPLACE Lcom/google/common/collect/ImmutableList;
+mutable field net/minecraft/world/level/levelgen/feature/DeltaFeature CANNOT_REPLACE Lcom/google/common/collect/ImmutableList;
+accessible field net/minecraft/resources/RegistryOps lookupProvider Lnet/minecraft/resources/RegistryOps$RegistryInfoLookup;

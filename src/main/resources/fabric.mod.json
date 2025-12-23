@@ -1,0 +1,32 @@
+{
+	"schemaVersion": 1,
+	"id": "bygonefortress",
+	"version": "${version}",
+	"name": "Bygone Fortress: Legacy",
+	"description": "Continuing the discontinued fortress from Bygone Nether. An unofficial 1.20 port by cassiancc.",
+	"authors": [
+		"cassiancc",
+		"izofar"
+	],
+	"contact": {
+		"homepage": "https://modrinth.com/project/bygone-fortress-legacy",
+		"sources": "https://github.com/cassiancc/bygone-fortress"
+	},
+	"license": "MIT",
+	"icon": "bygonefortress.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.izofar.bygonefortress.BygoneFortressMod"
+		]
+	},
+	"mixins": [
+		"bygonefortress.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.18.3",
+		"minecraft": "1.20.1",
+		"java": ">=17",
+		"fabric-api": "*"
+	}
+}

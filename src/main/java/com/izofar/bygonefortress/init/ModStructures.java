@@ -2,17 +2,20 @@ package com.izofar.bygonefortress.init;
 
 import com.izofar.bygonefortress.BygoneFortressMod;
 import com.izofar.bygonefortress.world.structure.NetherFortressStructure;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.structure.StructureType;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
+
+import java.util.function.Supplier;
 
 public abstract class ModStructures {
 
-	public static final DeferredRegister<StructureType<?>> MODDED_STRUCTURES = DeferredRegister.create(Registries.STRUCTURE_TYPE, BygoneFortressMod.MODID);
-
-	public static final RegistryObject<StructureType<NetherFortressStructure>> NETHER_FORTRESS = MODDED_STRUCTURES.register("fortress", () -> () -> NetherFortressStructure.CODEC);
+	public static final Supplier<StructureType<NetherFortressStructure>> NETHER_FORTRESS = ()-> Registry.register(BuiltInRegistries.STRUCTURE_TYPE, new ResourceLocation(BygoneFortressMod.MODID, "fortress"), ()-> NetherFortressStructure.CODEC);
 	
-	public static void register(IEventBus eventBus) { MODDED_STRUCTURES.register(eventBus); }
+	public static void register() {
+		NETHER_FORTRESS.get();
+
+	}
 }

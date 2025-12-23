@@ -4,15 +4,18 @@ import com.izofar.bygonefortress.init.ModProcessors;
 import com.izofar.bygonefortress.util.ModStructureUtils;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.WorldGenRegion;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Blocks;
@@ -27,7 +30,7 @@ public class DataBlockProcessor extends StructureProcessor {
     private static final ResourceLocation EMPTY_RL = new ResourceLocation("minecraft", "empty");
 
     public static final Codec<DataBlockProcessor> CODEC  = RecordCodecBuilder.create((instance) -> instance.group(
-                    RegistryOps.retrieveRegistryLookup(Registries.PROCESSOR_LIST).forGetter((processor) -> processor.processorListRegistry),
+                    ModStructureUtils.retrieveRegistryLookup(Registries.PROCESSOR_LIST).forGetter((processor) -> processor.processorListRegistry),
                     Codec.mapPair(BlockState.CODEC.fieldOf("trigger"), BlockState.CODEC.fieldOf("replacement"))
                             .codec().listOf()
                             .xmap((list) -> list.stream().collect(Collectors.toMap(Pair::getFirst, Pair::getSecond)),
@@ -72,7 +75,7 @@ public class DataBlockProcessor extends StructureProcessor {
             BlockPos.MutableBlockPos currentPos = new BlockPos.MutableBlockPos().set(worldPos);
             StructureProcessorList structureProcessorList = null;
             if(processorList != null && !processorList.equals(EMPTY_RL)) {
-                structureProcessorList = processorListRegistry.getOrThrow(ResourceKey.create(Registries.PROCESSOR_LIST, processorList)).get();
+                structureProcessorList = processorListRegistry.getOrThrow(ResourceKey.create(Registries.PROCESSOR_LIST, processorList)).value();
             }
 
             if(levelReader instanceof WorldGenRegion worldGenRegion && !worldGenRegion.getCenter().equals(new ChunkPos(currentPos))) {

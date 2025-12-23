@@ -1,9 +1,13 @@
 package com.izofar.bygonefortress.util;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.Holder;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.MapCodec;
+import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.core.*;
+import net.minecraft.resources.RegistryOps;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.NoiseColumn;
@@ -15,7 +19,7 @@ import net.minecraft.world.level.levelgen.feature.BasaltColumnsFeature;
 import net.minecraft.world.level.levelgen.feature.DeltaFeature;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
-import net.minecraftforge.fml.ModList;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
 
 import java.util.Random;
 import java.util.function.Predicate;
@@ -95,7 +99,7 @@ public abstract class ModStructureUtils {
 	}
 
 	public static int getScaledNetherHeight(int vanillaHeight){
-		return (int) (vanillaHeight / 128.0F * (ModList.get().isLoaded("starmute") ? 256.0F : 128.0F));
+		return (int) (vanillaHeight / 128.0F * (FabricLoader.getInstance().isModLoaded("starmute") ? 256.0F : 128.0F));
 	}
 
 	public static void addBasaltRestrictions() {
@@ -146,4 +150,17 @@ public abstract class ModStructureUtils {
 
 	}
 
+	public static <E> MapCodec<HolderLookup.RegistryLookup<E>> retrieveRegistryLookup(ResourceKey<? extends Registry<? extends E>> resourceKey) {
+		return ExtraCodecs.retrieveContext(ops -> {
+			if (!(ops instanceof RegistryOps<?> registryOps))
+				return DataResult.error(() -> "Not a registry ops");
+
+			return registryOps.lookupProvider.lookup(resourceKey).map(registryInfo -> {
+				if (!(registryInfo.owner() instanceof HolderLookup.RegistryLookup<E> registryLookup))
+					return DataResult.<HolderLookup.RegistryLookup<E>>error(() -> "Found holder getter but was not a registry lookup for " + resourceKey);
+
+				return DataResult.success(registryLookup, registryInfo.elementsLifecycle());
+			}).orElseGet(() -> DataResult.error(() -> "Unknown registry: " + resourceKey));
+		});
+	}
 }
