@@ -6,10 +6,10 @@ license="MIT"
 [[mods]]
 modId="bygonefortress"
 version="1.0.0"
-displayName="Bygone Fortress: Legacy"
-logoFile="bygonefortress.png"
+displayName="Bygone Fortress Plus"
+logoFile="icon.png"
 authors="izofar, cassiancc"
-description='''Continuing the discontinued fortress from Bygone Nether. An unofficial 1.20 port by cassiancc.'''
+description='''Adds the original fortress from the Bygone Nether Mod - a port of Bygone Fortress to modern versions.'''
 
 [[dependencies.bygonefortress]]
     modId="forge"
