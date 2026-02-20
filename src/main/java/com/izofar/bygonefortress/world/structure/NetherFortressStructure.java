@@ -68,7 +68,7 @@ public class NetherFortressStructure extends Structure {
 
 	private static boolean checkChunk(Structure.GenerationContext context) {
 		WorldgenRandom worldgenrandom = new WorldgenRandom(new LegacyRandomSource(0L));
-		worldgenrandom.setLargeFeatureSeed(context.seed(), context.chunkPos().x, context.chunkPos().z);
+		worldgenrandom.setLargeFeatureSeed(context.seed(), context.chunkPos().x(), context.chunkPos().z());
 		return context.validBiome().test(context.chunkGenerator().getBiomeSource().getNoiseBiome(QuartPos.fromBlock(context.chunkPos().getMiddleBlockX()), QuartPos.fromBlock(64), QuartPos.fromBlock(context.chunkPos().getMiddleBlockZ()), context.randomState().sampler()));
 	}
 

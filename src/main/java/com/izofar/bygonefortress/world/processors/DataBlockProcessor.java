@@ -79,7 +79,7 @@ public class DataBlockProcessor extends StructureProcessor {
                 structureProcessorList = processorListRegistry.getOrThrow(ResourceKey.create(Registries.PROCESSOR_LIST, processorList)).value();
             }
 
-            if(levelReader instanceof WorldGenRegion worldGenRegion && !worldGenRegion.getCenter().equals(new ChunkPos(currentPos))) {
+            if(levelReader instanceof WorldGenRegion worldGenRegion && !worldGenRegion.getCenter().equals(ChunkPos.containing(currentPos))) {
                 return replacementState == null || replacementState.is(Blocks.STRUCTURE_VOID) ? null : new StructureTemplate.StructureBlockInfo(worldPos, replacementState, null);
             }
 
