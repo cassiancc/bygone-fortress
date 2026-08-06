@@ -9,8 +9,9 @@
 		"izofar"
 	],
 	"contact": {
-		"homepage": "https://modrinth.com/project/bygone-fortress-legacy",
-		"sources": "https://github.com/cassiancc/bygone-fortress"
+		"homepage": "https://modrinth.com/project/bygone-fortress",
+		"sources": "https://github.com/cassiancc/bygone-fortress",
+		"issues": "https://github.com/cassiancc/bygone-fortress/issues"
 	},
 	"license": "MIT",
 	"icon": "icon.png",
@@ -26,7 +27,7 @@
 	"accessWidener": "bygonefortress.accesswidener",
 	"depends": {
 		"fabricloader": ">=0.18.3",
-		"minecraft": ">26 <27",
+		"minecraft": "~26.1",
 		"java": ">=17",
 		"fabric-api": "*"
 	}
