@@ -22,11 +22,12 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.*;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class DataBlockProcessor extends StructureProcessor {
+public class DataBlockProcessor implements StructureProcessor {
 
     private static final Identifier EMPTY_RL = Identifier.withDefaultNamespace("empty");
 
@@ -66,8 +67,7 @@ public class DataBlockProcessor extends StructureProcessor {
     }
 
     @Override
-    public StructureTemplate.StructureBlockInfo processBlock(LevelReader levelReader, BlockPos templateOffset, BlockPos worldOffset, StructureTemplate.StructureBlockInfo structureBlockInfoLocal, StructureTemplate.StructureBlockInfo structureBlockInfoWorld, StructurePlaceSettings structurePlacementData) {
-
+    public StructureTemplate.StructureBlockInfo processBlock(LevelReader levelReader, BlockPos targetPosition, BlockPos referencePos, BlockPos templateOffset, StructureTemplate.StructureBlockInfo structureBlockInfoWorld, StructurePlaceSettings structurePlacementData) {
         BlockState blockState = structureBlockInfoWorld.state();
         if (triggerAndReplacementBlocks.containsKey(blockState)) {
             BlockPos worldPos = structureBlockInfoWorld.pos();
@@ -108,7 +108,7 @@ public class DataBlockProcessor extends StructureProcessor {
                         if(newPillarState2 == null) {
                             break;
                         }
-                        newPillarState2 = processor.processBlock(levelReader, newPillarState1.pos(), newPillarState2.pos(), newPillarState1, newPillarState2, structurePlacementData);
+                        newPillarState2 = processor.processBlock(levelReader, newPillarState1.pos(), newPillarState2.pos(), newPillarState1.pos(), newPillarState2, structurePlacementData);
                     }
                 }
 
@@ -129,7 +129,7 @@ public class DataBlockProcessor extends StructureProcessor {
     }
 
     @Override
-    protected StructureProcessorType<?> getType() {
-        return ModProcessors.DATA_BLOCK_PROCESSOR.get();
+    public MapCodec<? extends StructureProcessor> codec() {
+        return DataBlockProcessor.CODEC;
     }
 }
